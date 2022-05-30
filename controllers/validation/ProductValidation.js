@@ -18,7 +18,25 @@ module.exports = {
         .custom((value, { req }) => {
           return FileValidationHelper.checkFileMaxSize(req.file, maxFileSize)
         })
-        .withMessage('Maximum file size of ' + maxFileSize / 1000000 + 'MB')
+        .withMessage('Maximum file size of ' + maxFileSize / 1000000 + 'MB'),
+          // SOLUTION
+      check('featured')
+        .custom(async (value, { req }) => {
+          // SOLUTION Here I manage three cases: value is true or 'true, value is 1 or '1'
+          if(value == true || value === 'true'){
+            const numFeaturedProductsRestaurant = await Product.count({
+              where: {
+                restaurantId: req.body.restaurantId,
+                featured: true
+              }
+            })
+            if(numFeaturedProductsRestaurant > 0){
+              return Promise.reject(new Error('You can only have one featured product for this restaurant')) 
+            }
+          }
+          return Promise.resolve('ok')
+        })
+        .withMessage('You can only have one featured product for this restaurant')
     ]
   },
 

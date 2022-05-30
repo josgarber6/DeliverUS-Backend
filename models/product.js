@@ -29,7 +29,9 @@ module.exports = (sequelize, DataTypes) => {
     order: DataTypes.INTEGER,
     availability: DataTypes.BOOLEAN,
     restaurantId: DataTypes.INTEGER,
-    productCategoryId: DataTypes.INTEGER
+    productCategoryId: DataTypes.INTEGER,
+    // SOLUTION
+    featured: DataTypes.BOOLEAN,
   }, {
     sequelize,
     modelName: 'Product'

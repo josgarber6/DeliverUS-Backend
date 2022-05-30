@@ -67,22 +67,30 @@ exports.create = async function (req, res) {
 }
 
 exports.show = async function (req, res) {
-  // Only returns PUBLIC information of restaurants
+  // SOLUTION
   try {
     const restaurant = await Restaurant.findByPk(req.params.restaurantId, {
+      //logging: console.log,
       attributes: { exclude: ['userId'] },
       include: [{
         model: Product,
         as: 'products',
-        order: [['order', 'ASC']],
+        separate: true,
+        order: [['featured', 'desc'], ['order', 'asc']], //Option 1: with separate
         include: { model: ProductCategory, as: 'productCategory' }
       },
       {
         model: RestaurantCategory,
         as: 'restaurantCategory'
-      }]
+      }],
+      /*order: [
+        [{ model: Product, as: 'products' }, 'featured', 'desc'],
+        [{ model: Product, as: 'products' }, 'order', 'asc'] //Option 2: model-level ordering
+      ]*/
     }
     )
+    //Option 3: order in javascript: sub-optimal
+    //restaurant.products.sort((product1, product2) => Number(product2.featured) - Number(product1.featured))
     res.json(restaurant)
   } catch (err) {
     res.status(404).send(err)
