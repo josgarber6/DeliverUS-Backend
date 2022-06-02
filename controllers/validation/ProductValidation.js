@@ -37,6 +37,26 @@ module.exports = {
           return Promise.resolve('ok')
         })
         .withMessage('You can only have one featured product for this restaurant')
+      // SOLUTION JUAN
+      //check('featured')
+      //  .custom(async (value, { req }) => {
+      //    try {
+      //      const products = await Product.findAll({
+      //        where: {
+      //          featured: true,
+      //          restaurantId: req.body.restaurantId
+      //        }
+      //      })
+      //      console.log(products.length)
+      //      if (products.length > 0) {
+      //        return Promise.reject(new Error('More than one promoted product'))
+      //      } else {
+      //        return Promise.resolve('Promoted Products ok')
+      //      }
+      //    } catch (err) {
+      //      return Promise.reject(err)
+      //    }
+      //  })
     ]
   },
 
