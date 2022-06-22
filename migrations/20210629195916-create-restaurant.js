@@ -47,6 +47,11 @@ module.exports = {
       heroImage: {
         type: Sequelize.STRING
       },
+      // SOLUTION
+      promoted: {
+        type: Sequelize.BOOLEAN,
+        defaultValue: false // El enunciado indica que cuando un usuario cree un restaurante el formulario de creación lo presente por defecto como promocionado. Aquí damos un valor por defecto si una inserción no indica valor para promoted.
+      },
       status: {
         type: Sequelize.ENUM,
         values: [
