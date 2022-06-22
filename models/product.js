@@ -28,6 +28,11 @@ module.exports = (sequelize, DataTypes) => {
     image: DataTypes.STRING,
     order: DataTypes.INTEGER,
     availability: DataTypes.BOOLEAN,
+    // Solution
+    fats: DataTypes.DOUBLE,
+    proteins: DataTypes.DOUBLE,
+    carbohydrates: DataTypes.DOUBLE,
+    calories: DataTypes.DOUBLE,
     restaurantId: DataTypes.INTEGER,
     productCategoryId: DataTypes.INTEGER
   }, {

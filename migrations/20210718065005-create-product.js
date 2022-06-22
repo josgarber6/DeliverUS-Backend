@@ -28,6 +28,19 @@ module.exports = {
       availability: {
         type: Sequelize.BOOLEAN
       },
+      // Solution
+      fats: {
+        type: Sequelize.DOUBLE
+      },
+      proteins: {
+        type: Sequelize.DOUBLE
+      },
+      carbohydrates: {
+        type: Sequelize.DOUBLE
+      },
+      calories: {
+        type: Sequelize.DOUBLE
+      },
       restaurantId: {
         type: Sequelize.INTEGER,
         references: {
