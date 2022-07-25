@@ -1,0 +1,25 @@
+[
+  {
+    "_id": "f7642380-23f6-4a8e-a900-f5104f06b46e",
+    "colId": "history",
+    "containerId": "",
+    "name": "{{base_url}}/orders",
+    "url": "{{base_url}}/orders",
+    "method": "GET",
+    "sortNum": 0,
+    "created": "2022-07-23T20:36:04.481Z",
+    "modified": "2022-07-23T20:50:05.753Z",
+    "headers": [],
+    "params": [],
+    "body": {
+      "type": "json",
+      "raw": "{\n    \"restaurantId\":1\n}",
+      "form": []
+    },
+    "auth": {
+      "type": "bearer",
+      "bearer": "{{token}}"
+    },
+    "tests": []
+  }
+]

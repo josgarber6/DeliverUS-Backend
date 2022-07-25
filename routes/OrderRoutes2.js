@@ -1,6 +1,7 @@
 'use strict'
 const OrderController = require('../controllers/OrderController')
 const OrderValidation = require('../controllers/validation/OrderValidation')
+const pruebecita = require('../controllers/findByPk - findAll')
 
 const multer = require('multer')
 const upload = multer()
@@ -14,10 +15,15 @@ module.exports = (options) => {
   // 2. Creating a new order (only customers can create new orders)
 
   app.route('/orders')
+    // .get(
+    //   middlewares.isLoggedIn,
+    //   middlewares.hasRole('customer'),
+    //   OrderController.indexCustomer
+    // )
     .get(
       middlewares.isLoggedIn,
       middlewares.hasRole('customer'),
-      OrderController.indexCustomer
+      pruebecita.indexRestaurant
     )
     .post(
       middlewares.isLoggedIn,

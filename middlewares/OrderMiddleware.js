@@ -23,7 +23,16 @@ const checkOrderOwnership = async (req, res, next) => {
 
 // TODO: Implement the following function to check if the order belongs to current loggedIn customer (order.userId equals or not to req.user.id)
 const checkOrderCustomer = async (req, res, next) => {
-
+  try {
+    const order = await Order.findByPk(req.params.orderId)
+    if (order.userId === req.user.id) {
+      next()
+    } else {
+      return res.status(403).send('Not enough privilges. This entity does not belong to you')
+    }
+  } catch (error) {
+    return res.status(404).send(error)
+  }
 }
 
 const checkOrderVisible = (req, res, next) => {

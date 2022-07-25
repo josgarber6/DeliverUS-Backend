@@ -7,6 +7,7 @@ const User = models.User
 const moment = require('moment')
 const { validationResult } = require('express-validator')
 const { Op } = require('sequelize')
+const sequelize = require('sequelize')
 
 const generateFilterWhereClauses = function (req) {
   const filterWhereClauses = []
@@ -94,7 +95,35 @@ exports.indexRestaurant = async function (req, res) {
 // Orders have to include products that belongs to each order and restaurant details
 // sort them by createdAt date, desc.
 exports.indexCustomer = async function (req, res) {
+  try {
+    const orders = await Order.findAll({
+      where: {
+        userId: req.user.id
+      },
+      include: [{
+        model: Product,
+        as: 'products'
+      }, {
+        model: Restaurant,
+        as: 'restaurant',
+        attributes: { exclude: ['createdAt', 'updatedAt'] }
+      }],
+      order: [['createdAt', 'DESC']]
+    })
 
+    for (const order of orders) {
+      const orderProducts = []
+      for (const product of order.products) {
+        if (product.OrderProducts.OrderId === order.id) {
+          orderProducts.push(product)
+        }
+      }
+      order.products = [...orderProducts]
+    }
+    res.json(orders)
+  } catch (error) {
+    res.status(500).send(error)
+  }
 }
 
 // TODO: Implement the create function that receives a new order and store it at the database.
@@ -105,7 +134,60 @@ exports.indexCustomer = async function (req, res) {
 // 4. In order to save the order and related products, start a transaction, store the order, store each product linea and commit the transaction
 // 5. If an exception is raised, catch it and rollback the transaction
 exports.create = async function (req, res) {
+  const err = validationResult(req)
+  if (err.errors.length > 0) {
+    res.status(422).send(err)
+  } else {
+    const t = await sequelize.transaction
+    try {
+      const newOrder = Order.build(req.body)
+      newOrder.createdAt = null
+      newOrder.startedAt = null
+      newOrder.deliveredAt = null
+      newOrder.userId = req.user.id
 
+      // Calculamos la segunda condición de la regla de negocio 2
+      const restaurant = await Restaurant.findByPk(req.body.restaurantId)
+      let precio = 0.0
+      for (const product of req.body.products) {
+        const databaseProduct = await Product.findByPk(product.productId)
+        precio += product.quantity * databaseProduct.price
+      }
+
+      if (precio > 10) {
+        newOrder.shippingCosts = 0.0
+      } else {
+        newOrder.shippingCosts = restaurant.shippingCosts
+      }
+      newOrder.price = precio + newOrder.shippingCosts
+
+      // Transaction
+      const order = await Order.create({
+        createdAd: newOrder.createdAt,
+        startedAt: newOrder.startedAt,
+        sentAt: newOrder.sentAt,
+        deliveredAt: newOrder.deliveredAt,
+        price: newOrder.price,
+        address: newOrder.address,
+        shippingCosts: newOrder.shippingCosts,
+        restaurantId: newOrder.restaurantId,
+        userId: newOrder.userId,
+        status: null
+      }, { transaction: t })
+
+      for (const product of req.body.products) {
+        const databaseProduct = await Product.findByPk(product.productId)
+        await order.addProduct(databaseProduct, { through: { quantity: product.quantity, unityPrice: databaseProduct.price } })
+      }
+      res.json(order)
+    } catch (error) {
+      if (error.name.includes('ValidationError')) {
+        res.status(422).send(error)
+      } else {
+        res.status(500).send(error)
+      }
+    }
+  }
 }
 
 exports.confirm = async function (req, res) {
