@@ -141,7 +141,7 @@ exports.create = async function (req, res) {
     const t = await sequelize.transaction
     try {
       const newOrder = Order.build(req.body)
-      newOrder.createdAt = null
+      newOrder.createdAt = Date.now()
       newOrder.startedAt = null
       newOrder.deliveredAt = null
       newOrder.userId = req.user.id
