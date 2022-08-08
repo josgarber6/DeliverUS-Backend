@@ -5,7 +5,7 @@
     "default": true,
     "sortNum": 10000,
     "created": "2021-07-24T16:26:46.306Z",
-    "modified": "2022-07-25T11:01:51.860Z",
+    "modified": "2022-08-08T11:07:29.121Z",
     "data": [
       {
         "name": "base_url",
@@ -13,7 +13,7 @@
       },
       {
         "name": "token",
-        "value": "adc08f8d68f39f75b42de1d4ad5ed9390c7a7c9a"
+        "value": "3e6459d09eea6629e47a67f0805eef14ac4fce50"
       },
       {
         "name": "last_created_restaurant",
@@ -21,7 +21,7 @@
       },
       {
         "name": "last_created_order",
-        "value": "17"
+        "value": "15"
       },
       {
         "name": "last_created_product",

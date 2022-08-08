@@ -16,7 +16,7 @@ exports.index = async function (req, res) {
         model: RestaurantCategory,
         as: 'restaurantCategory'
       },
-        order: [[{ model: RestaurantCategory, as: 'restaurantCategory' }, 'name', 'ASC']]
+        order: [[{ model: RestaurantCategory, as: 'restaurantCategory' }, 'name', 'DESC']]
       }
     )
     res.json(restaurants)
